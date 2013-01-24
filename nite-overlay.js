@@ -7,6 +7,7 @@
 
 var nite = {
     map: null,
+    date: null,
     marker_sun: null,
     marker_shadow: null,
     marker_shadow_lite: null,
@@ -46,6 +47,7 @@ var nite = {
         return new google.maps.LatLng(-this.sun_position.lat(), -this.sun_position.lng() + 180);
     },
     refresh: function() {
+        if(!this.isVisible()) return;
         this.refreshSunZenith();
         this.marker_shadow.setCenter(this.getShadowPosition());
         this.marker_shadow_lite.setCenter(this.getShadowPosition());
@@ -55,6 +57,7 @@ var nite = {
 
         // based on NOAA solar calculations
         var utc = new Date();
+        if(this.date) { utc = new Date(this.date); }
         utc = new Date(utc.getTime() + utc.getTimezoneOffset() * 60000);
         var mins_past_midnight = (utc.getHours() * 60 + utc.getMinutes()) / 1440;
         var jd = 2415018.5 - ((new Date("01/01/1900 00:00:00 UTC")).getTime() - utc.getTime()) / 1000 / 60 / 60 / 24;
@@ -77,17 +80,23 @@ var nite = {
 
         this.sun_position = new google.maps.LatLng(lat, lng);
     },
+    setDate: function(date) {
+        this.date = date;        
+        this.refresh();
+    },
     setMap: function(map) {
         this.map = map;        
-        this.marker_shadow.setMap(map);
-        this.marker_shadow_lite.setMap(map);
     },
     show: function() {
         this.marker_shadow.setVisible(true); 
         this.marker_shadow_lite.setVisible(true); 
+        this.refresh();
     },
     hide: function() {
         this.marker_shadow.setVisible(false); 
         this.marker_shadow_lite.setVisible(false); 
+    },
+    isVisible: function() {
+        return this.marker_shadow.getVisible(); 
     }
 }

@@ -1,8 +1,15 @@
-# Nite Overlay
+# Nite Overlay - Overview
 
-Generates an overlay to illustrate the day/night cycle on the map. The night side is shaded slightly darker.
+Generates an overlay to illustrate the day/night cycle. The night side is shaded slightly darker.
 
-## Use
+Works with Google Maps API v3
+
+The sun position is estimated using an adapted method from NOAA's solar calculator, which is based on equations from Astronomical Algorithms, by Jean Meeus.  
+More details: http://www.esrl.noaa.gov/gmd/grad/solcalc/calcdetails.html
+
+*Might not work on some mobile devices. I've not explored the reason for this*
+
+## Quick start
 
 ```javascript
 var map = google.maps.Map(...);
@@ -13,12 +20,12 @@ Use to the refresh method to update the position periodically. Perhaps via setIn
 Note: *If the overlay is hidden and refresh() is called, the overlay position will not be updated.  
 Not until the overlay is visible again.*
 
-## Methods
+## Available methods
 
-`nite.setMap()` set a different map object  
+`nite.setMap()` set a specific map object  
 `nite.setDate(Date object)` set a specific datetime, or `null` to use current datetime  
 `nite.refresh()` Recalculate and refresh the position of the overlay  
 `nite.isVisible()` turns a boolean if the overlay is visible on the map  
 `nite.show()` Make the overlay visible  
-`nite.hide()` Clear the overlay from the map  
+`nite.hide()` Hide the overlay
 

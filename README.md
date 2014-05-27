@@ -1,3 +1,5 @@
+![Preview of Nite Overlay](preview.jpg "Preview of Nite Overlay")
+
 # Nite Overlay - Overview
 
 Generates an overlay to illustrate the day/night cycle. The night side is shaded slightly darker.

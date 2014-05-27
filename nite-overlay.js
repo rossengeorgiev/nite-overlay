@@ -43,8 +43,11 @@ var nite = {
             editable: false
         });
     },
+    getSunPosition: function() {
+        return this.sun_position;
+    },
     getShadowPosition: function() {
-        return new google.maps.LatLng(-this.sun_position.lat(), -this.sun_position.lng() + 180);
+        return (this.sun_position) ? new google.maps.LatLng(-this.sun_position.lat(), -this.sun_position.lng() + 180) : null;
     },
     refresh: function() {
         if(!this.isVisible()) return;

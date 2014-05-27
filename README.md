@@ -27,7 +27,9 @@ Not until the overlay is visible again.*
 `nite.setMap()` set a specific map object  
 `nite.setDate(Date object)` set a specific datetime, or `null` to use current datetime  
 `nite.refresh()` Recalculate and refresh the position of the overlay  
-`nite.isVisible()` turns a boolean if the overlay is visible on the map  
+`nite.isVisible()` returns a boolean if the overlay is visible on the map  
 `nite.show()` Make the overlay visible  
-`nite.hide()` Hide the overlay
+`nite.hide()` Hide the overlay  
+`nite.getSunPosition()` returns LatLng for the Sun  
+`nite.getShadowPosition()` returns LatLng for the night side  
 

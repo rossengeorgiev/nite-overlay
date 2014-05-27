@@ -1,4 +1,4 @@
-/* Nite v1.0
+/* Nite v1.1
  * A tiny library to create a night overlay over the map
  * Author: Rossen Georgiev @ https://github.com/rossengeorgiev
  * Requires: GMaps API 3
@@ -14,13 +14,13 @@ var nite = {
     shadow_radius: parseInt(6371 * Math.PI * 500),
     sun_position: null,
 
-    init: function(map) {  
+    init: function(map) {
         if(typeof google === 'undefined'
            || typeof google.maps === 'undefined') throw "Nite Overlay: no google.maps detected";
-        
+
         this.map = map;
         this.refreshSunZenith();
-        
+
         this.marker_shadow = new google.maps.Circle({
             map: this.map,
             center: this.getShadowPosition(),
@@ -29,8 +29,8 @@ var nite = {
             fillOpacity: 0.1,
             strokeOpacity: 0,
             clickable: false,
-            editable: false 
-        }); 
+            editable: false
+        });
 
         this.marker_shadow_lite = new google.maps.Circle({
             map: this.map,
@@ -40,8 +40,8 @@ var nite = {
             fillOpacity: 0.1,
             strokeOpacity: 0,
             clickable: false,
-            editable: false 
-        }); 
+            editable: false
+        });
     },
     getShadowPosition: function() {
         return new google.maps.LatLng(-this.sun_position.lat(), -this.sun_position.lng() + 180);
@@ -69,7 +69,7 @@ var nite = {
         var sun_app_long = sun_true_long - 0.00569 - 0.00478*Math.sin(rad*125.04-1934.136*jc);
         var mean_obliq_ecliptic = 23+(26+((21.448-jc*(46.815+jc*(0.00059-jc*0.001813))))/60)/60;
         var obliq_corr = mean_obliq_ecliptic + 0.00256*Math.cos(rad*125.04-1934.136*jc);
-        
+
         var lat = Math.asin(Math.sin(rad*obliq_corr)*Math.sin(rad*sun_app_long)) / rad;
 
         var eccent = 0.016708634-jc*(0.000042037+0.0000001267*jc);
@@ -81,22 +81,22 @@ var nite = {
         this.sun_position = new google.maps.LatLng(lat, lng);
     },
     setDate: function(date) {
-        this.date = date;        
+        this.date = date;
         this.refresh();
     },
     setMap: function(map) {
-        this.map = map;        
+        this.map = map;
     },
     show: function() {
-        this.marker_shadow.setVisible(true); 
-        this.marker_shadow_lite.setVisible(true); 
+        this.marker_shadow.setVisible(true);
+        this.marker_shadow_lite.setVisible(true);
         this.refresh();
     },
     hide: function() {
-        this.marker_shadow.setVisible(false); 
-        this.marker_shadow_lite.setVisible(false); 
+        this.marker_shadow.setVisible(false);
+        this.marker_shadow_lite.setVisible(false);
     },
     isVisible: function() {
-        return this.marker_shadow.getVisible(); 
+        return this.marker_shadow.getVisible();
     }
 }

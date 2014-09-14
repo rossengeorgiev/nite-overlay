@@ -60,7 +60,6 @@ var nite = {
     },
     calculatePositionOfSun: function(date) {
         date = (date instanceof Date) ? date : new Date();
-        console.log(date);
 
         var rad = 0.017453292519943295;
 

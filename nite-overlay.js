@@ -1,4 +1,4 @@
-/* Nite v1.2
+/* Nite v1.3
  * A tiny library to create a night overlay over the map
  * Author: Rossen Georgiev @ https://github.com/rossengeorgiev
  * Requires: GMaps API 3
@@ -90,6 +90,8 @@ var nite = {
     },
     setMap: function(map) {
         this.map = map;
+        this.marker_shadow.setMap(this.map);
+        this.marker_shadow_lite.setMap(this.map);
     },
     show: function() {
         this.marker_shadow.setVisible(true);

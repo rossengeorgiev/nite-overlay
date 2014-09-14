@@ -1,4 +1,4 @@
-/* Nite v1.1
+/* Nite v1.2
  * A tiny library to create a night overlay over the map
  * Author: Rossen Georgiev @ https://github.com/rossengeorgiev
  * Requires: GMaps API 3
@@ -19,7 +19,7 @@ var nite = {
            || typeof google.maps === 'undefined') throw "Nite Overlay: no google.maps detected";
 
         this.map = map;
-        this.refreshSunZenith();
+        this.sun_position = this.calculatePositionOfSun();
 
         this.marker_shadow = new google.maps.Circle({
             map: this.map,
@@ -51,20 +51,22 @@ var nite = {
     },
     refresh: function() {
         if(!this.isVisible()) return;
-        this.refreshSunZenith();
+        this.sun_position = this.calculatePositionOfSun(this.date);
         this.marker_shadow.setCenter(this.getShadowPosition());
         this.marker_shadow_lite.setCenter(this.getShadowPosition());
     },
-    refreshSunZenith: function() {
+    jday: function(date) {
+        return (date.getTime() / 86400000.0) + 2440587.5;
+    },
+    calculatePositionOfSun: function(date) {
+        date = (date instanceof Date) ? date : new Date();
+        console.log(date);
+
         var rad = 0.017453292519943295;
 
         // based on NOAA solar calculations
-        var utc = new Date();
-        if(this.date) { utc = new Date(this.date); }
-        utc = new Date(utc.getTime() + utc.getTimezoneOffset() * 60000);
-        var mins_past_midnight = (utc.getHours() * 60 + utc.getMinutes()) / 1440;
-        var jd = 2415018.5 - ((new Date("01/01/1900 00:00:00 UTC")).getTime() - utc.getTime()) / 1000 / 60 / 60 / 24;
-        var jc = (jd - 2451545)/36525;
+        var mins_past_midnight = (date.getUTCHours() * 60 + date.getUTCMinutes()) / 1440;
+        var jc = (this.jday(date) - 2451545)/36525;
         var mean_long_sun = (280.46646+jc*(36000.76983+jc*0.0003032)) % 360;
         var mean_anom_sun = 357.52911+jc*(35999.05029-0.0001537*jc);
         var sun_eq = Math.sin(rad*mean_anom_sun)*(1.914602-jc*(0.004817+0.000014*jc))+Math.sin(rad*2*mean_anom_sun)*(0.019993-0.000101*jc)+Math.sin(rad*3*mean_anom_sun)*0.000289;
@@ -81,7 +83,7 @@ var nite = {
         var true_solar_time = (mins_past_midnight*1440+rq_of_time) % 1440;
         var lng = (true_solar_time/4 < 0) ? true_solar_time/4 + 180 : true_solar_time/4 - 180;
 
-        this.sun_position = new google.maps.LatLng(lat, lng);
+        return new google.maps.LatLng(lat, lng);
     },
     setDate: function(date) {
         this.date = date;

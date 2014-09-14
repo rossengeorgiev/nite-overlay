@@ -17,7 +17,13 @@ More details: http://www.esrl.noaa.gov/gmd/grad/solcalc/calcdetails.html
 var map = google.maps.Map(...);
 nite.init(map);
 ```
-Use to the refresh method to update the position periodically. Perhaps via setInterval();
+Use `refresh()` method to update the overlay periodically. Perhaps via `setInterval()`;
+
+```
+setInterval(function() { nite.refresh() }, 10000); // every 10s
+```
+
+Alternatively, a specific date can be selected via `setDate()` followed by a call to `refresh()` to redraw the overlay. Setting the date to `null` will cause nite overlay to use current date and time.
 
 Note: *If the overlay is hidden and refresh() is called, the overlay position will not be updated.  
 Not until the overlay is visible again.*
@@ -26,6 +32,7 @@ Not until the overlay is visible again.*
 
 `nite.setMap()` set a specific map object  
 `nite.setDate(Date object)` set a specific datetime, or `null` to use current datetime  
+`nite.calculatePositionOfSun(Date object)` returns LatLng for the specified date (has no effect on the overlay)  
 `nite.refresh()` Recalculate and refresh the position of the overlay  
 `nite.isVisible()` returns a boolean if the overlay is visible on the map  
 `nite.show()` Make the overlay visible  

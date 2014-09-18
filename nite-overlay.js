@@ -1,4 +1,4 @@
-/* Nite v1.3
+/* Nite v1.4
  * A tiny library to create a night overlay over the map
  * Author: Rossen Georgiev @ https://github.com/rossengeorgiev
  * Requires: GMaps API 3
@@ -47,7 +47,7 @@ var nite = {
         return this.sun_position;
     },
     getShadowPosition: function() {
-        return (this.sun_position) ? new google.maps.LatLng(-this.sun_position.lat(), -this.sun_position.lng() + 180) : null;
+        return (this.sun_position) ? new google.maps.LatLng(-this.sun_position.lat(), this.sun_position.lng() + 180) : null;
     },
     refresh: function() {
         if(!this.isVisible()) return;
@@ -80,7 +80,7 @@ var nite = {
         var y = Math.tan(rad*(obliq_corr/2))*Math.tan(rad*(obliq_corr/2));
         var rq_of_time = 4*((y*Math.sin(2*rad*mean_long_sun)-2*eccent*Math.sin(rad*mean_anom_sun)+4*eccent*y*Math.sin(rad*mean_anom_sun)*Math.cos(2*rad*mean_long_sun)-0.5*y*y*Math.sin(4*rad*mean_long_sun)-1.25*eccent*eccent*Math.sin(2*rad*mean_anom_sun))/rad);
         var true_solar_time = (mins_past_midnight*1440+rq_of_time) % 1440;
-        var lng = (true_solar_time/4 < 0) ? true_solar_time/4 + 180 : true_solar_time/4 - 180;
+        var lng = -((true_solar_time/4 < 0) ? true_solar_time/4 + 180 : true_solar_time/4 - 180);
 
         return new google.maps.LatLng(lat, lng);
     },

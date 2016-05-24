@@ -1,4 +1,4 @@
-/* Nite v1.4
+/* Nite v1.5
  * A tiny library to create a night overlay over the map
  * Author: Rossen Georgiev @ https://github.com/rossengeorgiev
  * Requires: GMaps API 3
@@ -8,11 +8,12 @@
 var nite = {
     map: null,
     date: null,
-    marker_sun: null,
-    marker_shadow: null,
-    marker_shadow_lite: null,
-    shadow_radius: parseInt(6371 * Math.PI * 500),
     sun_position: null,
+    earth_radius_meters: 6371008,
+    marker_twilight_civil: null,
+    marker_twilight_nautical: null,
+    marker_twilight_astronomical: null,
+    marker_night: null,
 
     init: function(map) {
         if(typeof google === 'undefined'
@@ -21,27 +22,51 @@ var nite = {
         this.map = map;
         this.sun_position = this.calculatePositionOfSun();
 
-        this.marker_shadow = new google.maps.Circle({
+        this.marker_twilight_civil = new google.maps.Circle({
             map: this.map,
             center: this.getShadowPosition(),
-            radius: this.shadow_radius,
+            radius: this.getShadowRadiusFromAngle(0),
             fillColor: "#000",
             fillOpacity: 0.1,
             strokeOpacity: 0,
             clickable: false,
             editable: false
         });
-
-        this.marker_shadow_lite = new google.maps.Circle({
+        this.marker_twilight_nautical = new google.maps.Circle({
             map: this.map,
             center: this.getShadowPosition(),
-            radius: this.shadow_radius * 0.96,
+            radius: this.getShadowRadiusFromAngle(6),
             fillColor: "#000",
             fillOpacity: 0.1,
             strokeOpacity: 0,
             clickable: false,
             editable: false
         });
+        this.marker_twilight_astronomical = new google.maps.Circle({
+            map: this.map,
+            center: this.getShadowPosition(),
+            radius: this.getShadowRadiusFromAngle(12),
+            fillColor: "#000",
+            fillOpacity: 0.1,
+            strokeOpacity: 0,
+            clickable: false,
+            editable: false
+        });
+        this.marker_night = new google.maps.Circle({
+            map: this.map,
+            center: this.getShadowPosition(),
+            radius: this.getShadowRadiusFromAngle(18),
+            fillColor: "#000",
+            fillOpacity: 0.1,
+            strokeOpacity: 0,
+            clickable: false,
+            editable: false
+        });
+    },
+    getShadowRadiusFromAngle: function(angle) {
+        var shadow_radius =  this.earth_radius_meters * Math.PI * 0.5;
+        var twilight_dist = ((this.earth_radius_meters * 2 * Math.PI) / 360) * angle;
+        return shadow_radius - twilight_dist;
     },
     getSunPosition: function() {
         return this.sun_position;
@@ -52,8 +77,11 @@ var nite = {
     refresh: function() {
         if(!this.isVisible()) return;
         this.sun_position = this.calculatePositionOfSun(this.date);
-        this.marker_shadow.setCenter(this.getShadowPosition());
-        this.marker_shadow_lite.setCenter(this.getShadowPosition());
+        var shadow_position = this.getShadowPosition();
+        this.marker_twilight_civil.setCenter(shadow_position);
+        this.marker_twilight_nautical.setCenter(shadow_position);
+        this.marker_twilight_astronomical.setCenter(shadow_position);
+        this.marker_night.setCenter(shadow_position);
     },
     jday: function(date) {
         return (date.getTime() / 86400000.0) + 2440587.5;
@@ -90,19 +118,25 @@ var nite = {
     },
     setMap: function(map) {
         this.map = map;
-        this.marker_shadow.setMap(this.map);
-        this.marker_shadow_lite.setMap(this.map);
+        this.marker_twilight_civil.setMap(this.map);
+        this.marker_twilight_nautical.setMap(this.map);
+        this.marker_twilight_astronomical.setMap(this.map);
+        this.marker_night.setMap(this.map);
     },
     show: function() {
-        this.marker_shadow.setVisible(true);
-        this.marker_shadow_lite.setVisible(true);
+        this.marker_twilight_civil.setVisible(true);
+        this.marker_twilight_nautical.setVisible(true);
+        this.marker_twilight_astronomical.setVisible(true);
+        this.marker_night.setVisible(true);
         this.refresh();
     },
     hide: function() {
-        this.marker_shadow.setVisible(false);
-        this.marker_shadow_lite.setVisible(false);
+        this.marker_twilight_civil.setVisible(false);
+        this.marker_twilight_nautical.setVisible(false);
+        this.marker_twilight_astronomical.setVisible(false);
+        this.marker_night.setVisible(false);
     },
     isVisible: function() {
-        return this.marker_shadow.getVisible();
+        return this.marker_night.getVisible();
     }
 }

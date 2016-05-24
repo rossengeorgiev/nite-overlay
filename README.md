@@ -2,7 +2,9 @@
 
 # Nite Overlay - Overview
 
-Generates an overlay to illustrate the day/night cycle. The night side is shaded slightly darker.
+Generates an overlay to illustrate the day/night cycle.
+There are 4 shade levels going from light to dark.
+They are civil twilight, nautical twilight, astronomical twilight and night.
 
 Works with Google Maps API v3
 

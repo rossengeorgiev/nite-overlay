@@ -1,4 +1,4 @@
-/* Nite v1.5
+/* Nite v1.6
  * A tiny library to create a night overlay over the map
  * Author: Rossen Georgiev @ https://github.com/rossengeorgiev
  * Requires: GMaps API 3
@@ -92,7 +92,7 @@ var nite = {
         var rad = 0.017453292519943295;
 
         // based on NOAA solar calculations
-        var mins_past_midnight = (date.getUTCHours() * 60 + date.getUTCMinutes()) / 1440;
+        var ms_past_midnight = ((date.getUTCHours() * 60 + date.getUTCMinutes()) * 60 + date.getUTCSeconds()) * 1000 + date.getUTCMilliseconds();
         var jc = (this.jday(date) - 2451545)/36525;
         var mean_long_sun = (280.46646+jc*(36000.76983+jc*0.0003032)) % 360;
         var mean_anom_sun = 357.52911+jc*(35999.05029-0.0001537*jc);
@@ -107,8 +107,8 @@ var nite = {
         var eccent = 0.016708634-jc*(0.000042037+0.0000001267*jc);
         var y = Math.tan(rad*(obliq_corr/2))*Math.tan(rad*(obliq_corr/2));
         var rq_of_time = 4*((y*Math.sin(2*rad*mean_long_sun)-2*eccent*Math.sin(rad*mean_anom_sun)+4*eccent*y*Math.sin(rad*mean_anom_sun)*Math.cos(2*rad*mean_long_sun)-0.5*y*y*Math.sin(4*rad*mean_long_sun)-1.25*eccent*eccent*Math.sin(2*rad*mean_anom_sun))/rad);
-        var true_solar_time = (mins_past_midnight*1440+rq_of_time) % 1440;
-        var lng = -((true_solar_time/4 < 0) ? true_solar_time/4 + 180 : true_solar_time/4 - 180);
+        var true_solar_time_in_deg = ((ms_past_midnight+rq_of_time*60000) % 86400000) / 240000;
+        var lng = -((true_solar_time_in_deg < 0) ? true_solar_time_in_deg + 180 : true_solar_time_in_deg - 180);
 
         return new google.maps.LatLng(lat, lng);
     },

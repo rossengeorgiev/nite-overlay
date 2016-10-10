@@ -1,4 +1,4 @@
-/* Nite v1.6
+/* Nite v1.7
  * A tiny library to create a night overlay over the map
  * Author: Rossen Georgiev @ https://github.com/rossengeorgiev
  * Requires: GMaps API 3
@@ -25,7 +25,7 @@ var nite = {
         this.marker_twilight_civil = new google.maps.Circle({
             map: this.map,
             center: this.getShadowPosition(),
-            radius: this.getShadowRadiusFromAngle(0),
+            radius: this.getShadowRadiusFromAngle(0.566666),
             fillColor: "#000",
             fillOpacity: 0.1,
             strokeOpacity: 0,
@@ -108,6 +108,7 @@ var nite = {
         var y = Math.tan(rad*(obliq_corr/2))*Math.tan(rad*(obliq_corr/2));
         var rq_of_time = 4*((y*Math.sin(2*rad*mean_long_sun)-2*eccent*Math.sin(rad*mean_anom_sun)+4*eccent*y*Math.sin(rad*mean_anom_sun)*Math.cos(2*rad*mean_long_sun)-0.5*y*y*Math.sin(4*rad*mean_long_sun)-1.25*eccent*eccent*Math.sin(2*rad*mean_anom_sun))/rad);
         var true_solar_time_in_deg = ((ms_past_midnight+rq_of_time*60000) % 86400000) / 240000;
+
         var lng = -((true_solar_time_in_deg < 0) ? true_solar_time_in_deg + 180 : true_solar_time_in_deg - 180);
 
         return new google.maps.LatLng(lat, lng);

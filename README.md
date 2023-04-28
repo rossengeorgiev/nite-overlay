@@ -9,7 +9,7 @@ They are civil twilight, nautical twilight, astronomical twilight and night.
 Works with Google Maps API v3
 
 The sun position is estimated using an adapted method from NOAA's solar calculator, which is based on equations from Astronomical Algorithms, by Jean Meeus.  
-More details: http://www.esrl.noaa.gov/gmd/grad/solcalc/calcdetails.html
+More details: https://gml.noaa.gov/grad/solcalc/calcdetails.html
 
 *Might not work on some mobile devices. I've not explored the reason for this*
 
